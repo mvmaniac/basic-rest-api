@@ -7,19 +7,29 @@ GET http://localhost:8080/users
 GET http://localhost:8080/users/2
 
 ###
+// user 100  조회 (에러 발생)
+GET http://localhost:8080/users/100
+
+###
 // user 저장
 POST http://localhost:8080/users
 Content-Type: application/json
 
 {
   "name": "dev4",
-  "joinDate": "2020-06-11T23:28:26.9327792"
+  "joinDate": "2020-06-11T23:28:26"
 }
 
 > {%
-  client.global.set("userId", response.body.id)
+  client.global.set("location", response.headers.valueOf('Location'))
 %}
 
 ###
 // 저장한 user 조회
-GET http://localhost:8080/users/{{userId}}
+GET {{location}}
+
+
+###
+
+// user 1 삭제
+DELETE http://localhost:8080/users/1

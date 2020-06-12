@@ -42,4 +42,9 @@ public class UserService {
     return user;
   }
 
+  public Long deleteUserById(Long id) {
+    final boolean isRemove = users.removeIf(user -> user.getId().equals(id));
+    return isRemove ? id : null;
+  }
+
 }
