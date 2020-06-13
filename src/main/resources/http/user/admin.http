@@ -1,0 +1,14 @@
+###
+// users 목록 조회
+GET http://localhost:8080/admin/users
+
+###
+// user 1  조회 v1
+GET http://localhost:8080/admin/v1/users/1
+
+###
+// user 1  조회 v2
+# GET http://localhost:8080/admin/v2/users/1
+GET http://localhost:8080/admin/users/1
+# x-api-version: 2
+Accept: application/vnd.api.v2+json

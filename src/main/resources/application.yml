@@ -2,6 +2,9 @@ spring:
   application:
     name: basic-rest-api
 
+  messages:
+    basename: i18n/messages
+
   jpa:
     show-sql: false
     hibernate:

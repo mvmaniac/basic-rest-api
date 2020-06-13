@@ -1,4 +1,4 @@
-package io.devfactory.user.exception;
+package io.devfactory.global.error;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +20,10 @@ public class ExceptionResponse {
     this.message = message;
     this.timeStamp = timeStamp;
     this.description = description;
+  }
+
+  public static ExceptionResponse of(String message, LocalDateTime timeStamp, String description) {
+    return new ExceptionResponse(message, timeStamp, description);
   }
 
 }

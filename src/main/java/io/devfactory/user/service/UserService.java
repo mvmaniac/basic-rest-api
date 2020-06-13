@@ -14,9 +14,9 @@ public class UserService {
   private static int usersCount = 3;
 
   static {
-    users.add(User.create().id(1L).name("Dev1").joinDate(LocalDateTime.now()).build());
-    users.add(User.create().id(2L).name("Dev2").joinDate(LocalDateTime.now()).build());
-    users.add(User.create().id(3L).name("Dev3").joinDate(LocalDateTime.now()).build());
+    users.add(User.of(1L, "Dev1", LocalDateTime.now(), "1234", "123456-78910"));
+    users.add(User.of(2L, "Dev2", LocalDateTime.now(), "2234", "223456-78910"));
+    users.add(User.of(3L, "Dev3", LocalDateTime.now(), "3234", "323456-78910"));
   }
 
   public List<User> findAllUsers() {
