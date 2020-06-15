@@ -1,4 +1,4 @@
-package io.devfactory.user.controller;
+package io.devfactory.user.api;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -49,7 +49,7 @@ public class AdminUserController {
   }
 
 //  @GetMapping(value = "/users/{id}/", params = "version=2") // RequestParam를 통한 버전관리
-//@GetMapping(value = "/users/{id}", headers = "x-api-version=2") // header를 통한 버전관리
+//  @GetMapping(value = "/users/{id}", headers = "x-api-version=2") // header를 통한 버전관리
   @GetMapping(value = "/users/{id}", produces = "application/vnd.api.v2+json") // MIME type를 통한 버전관리
   public MappingJacksonValue retrieveUserV2(@PathVariable("id") Long id) {
     final User findUser = userService.findUserById(id);

@@ -19,6 +19,12 @@ spring:
     livereload.enabled: true
     restart.enabled: false
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 logging:
   level:
     io.devfactory: debug

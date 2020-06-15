@@ -1,9 +1,12 @@
-package io.devfactory.user.controller;
+package io.devfactory.user.api;
 
 import io.devfactory.user.domain.User;
 import io.devfactory.user.exception.UserNotFoundException;
 import io.devfactory.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.core.TypeReferences.EntityModelType;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +20,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -29,14 +35,19 @@ public class UserController {
   }
 
   @GetMapping("/users/{id}")
-  public User retrieveUser(@PathVariable("id") Long id) {
+  public EntityModel<User> retrieveUser(@PathVariable("id") Long id) {
     final User findUser = userService.findUserById(id);
 
     if (Objects.isNull(findUser)) {
       throw new UserNotFoundException(String.format("User ID not found: %d", id));
     }
 
-    return findUser;
+    // HATEOAS
+    final EntityModel<User> entityModel = new EntityModel<>(findUser);
+    final WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllUsers());
+    entityModel.add(linkTo.withRel("all-users"));
+
+    return entityModel;
   }
 
   @PostMapping("/users")

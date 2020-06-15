@@ -1,4 +1,4 @@
-package io.devfactory.user.controller;
+package io.devfactory.user.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
