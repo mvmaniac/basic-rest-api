@@ -11,7 +11,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 @RequestMapping("/messages")
 @RestController
-public class MessageController {
+public class MessageRestController {
 
   private final MessageSource messageSource;
 

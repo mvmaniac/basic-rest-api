@@ -5,6 +5,9 @@ spring:
   messages:
     basename: i18n/messages
 
+  datasource:
+    data: classpath:sql/data.sql
+
   jpa:
     show-sql: false
     hibernate:
@@ -18,6 +21,10 @@ spring:
   devtools:
     livereload.enabled: true
     restart.enabled: false
+
+  h2:
+    console:
+      enabled: true
 
 management:
   endpoints:

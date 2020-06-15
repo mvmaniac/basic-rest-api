@@ -4,8 +4,16 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.devfactory.post.domain.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import lombok.Builder;
@@ -17,8 +25,12 @@ import lombok.NoArgsConstructor;
 //@JsonFilter("UserInfo")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
+@Table(name = "tb_user")
+@Entity
 public class User {
 
+  @Id
+  @GeneratedValue
   private Long id;
 
   @Schema(description = "사용자의 이름을 입력해 주세요.")
@@ -35,6 +47,9 @@ public class User {
 
   @Schema(description = "사용자의 주민번호를 입력해 주세요.")
   private String ssn;
+
+  @OneToMany(mappedBy = "user")
+  private List<Post> posts = new ArrayList<>();
 
   @Builder(builderMethodName = "create")
   protected User(Long id, String name, LocalDateTime joinDate, String password, String ssn) {

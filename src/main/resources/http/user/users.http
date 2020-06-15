@@ -26,7 +26,7 @@ Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
 
 {
-  "name": "d",
+  "name": "dev4",
   "joinDate": "2020-06-11T23:28:26"
 }
 
