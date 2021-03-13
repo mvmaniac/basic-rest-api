@@ -43,7 +43,7 @@ public class UserRestController {
     }
 
     // HATEOAS
-    final EntityModel<User> entityModel = new EntityModel<>(findUser);
+    final EntityModel<User> entityModel = EntityModel.of(findUser);
     final WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllUsers());
     entityModel.add(linkTo.withRel("all-users"));
 
