@@ -3,13 +3,12 @@ package io.devfactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SuppressWarnings("squid:S1186")
+@SuppressWarnings("squid:S2699")
 @SpringBootTest
 class BasicRestApiApplicationTests {
 
   @Test
   void contextLoads() {
-
   }
 
 }

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 @RestController
-public class AdminUserRestController {
+public class AdminUserApi {
 
   private final UserService userService;
 
@@ -26,24 +26,24 @@ public class AdminUserRestController {
   public MappingJacksonValue retrieveAllUsers() {
     final List<User> findUsers = userService.findAllUsers();
 
-    final SimpleFilterProvider filters = getSimpleFilterProvider("UserInfo");
-    final MappingJacksonValue jacksonValue = new MappingJacksonValue(findUsers);
+    final var filters = getSimpleFilterProvider("UserInfo");
+    final var jacksonValue = new MappingJacksonValue(findUsers);
     jacksonValue.setFilters(filters);
     return jacksonValue;
   }
 
   @GetMapping("/v1/users/{id}") // URL를 통한 버전관리
   public MappingJacksonValue retrieveUserV1(@PathVariable("id") Long id) {
-    final User findUser = userService.findUserById(id);
+    final var findUser = userService.findUser(id);
 
     if (Objects.isNull(findUser)) {
       throw new UserNotFoundException(String.format("User ID not found: %d", id));
     }
 
-    final SimpleFilterProvider filters = getSimpleFilterProvider("UserInfo",
+    final var filters = getSimpleFilterProvider("UserInfo",
         "id", "name", "joinDate", "ssn");
 
-    final MappingJacksonValue jacksonValue = new MappingJacksonValue(findUser);
+    final var jacksonValue = new MappingJacksonValue(findUser);
     jacksonValue.setFilters(filters);
     return jacksonValue;
   }
@@ -52,28 +52,25 @@ public class AdminUserRestController {
 //  @GetMapping(value = "/users/{id}", headers = "x-api-version=2") // header를 통한 버전관리
   @GetMapping(value = "/users/{id}", produces = "application/vnd.api.v2+json") // MIME type를 통한 버전관리
   public MappingJacksonValue retrieveUserV2(@PathVariable("id") Long id) {
-    final User findUser = userService.findUserById(id);
+    final var findUser = userService.findUser(id);
 
     if (Objects.isNull(findUser)) {
       throw new UserNotFoundException(String.format("User ID not found: %d", id));
     }
 
-    final UserV2 userV2 = UserV2.of(findUser, "VIP");
+    final var userV2 = UserV2.of(findUser, "VIP");
 
-    final SimpleFilterProvider filters = getSimpleFilterProvider("UserInfoV2",
+    final var filters = getSimpleFilterProvider("UserInfoV2",
         "id", "name", "joinDate", "grade");
 
-    final MappingJacksonValue jacksonValue = new MappingJacksonValue(userV2);
+    final var jacksonValue = new MappingJacksonValue(userV2);
     jacksonValue.setFilters(filters);
     return jacksonValue;
   }
 
   private SimpleFilterProvider getSimpleFilterProvider(String filterId, String... properties) {
-    final SimpleBeanPropertyFilter propertyFilter = SimpleBeanPropertyFilter
-        .filterOutAllExcept(properties);
-
-    return new SimpleFilterProvider()
-        .addFilter(filterId, propertyFilter);
+    final var propertyFilter = SimpleBeanPropertyFilter.filterOutAllExcept(properties);
+    return new SimpleFilterProvider().addFilter(filterId, propertyFilter);
   }
 
 }

@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
       .headers()
         .frameOptions()
-          .disable()
+          .sameOrigin()
         .and()
 
       .httpBasic()

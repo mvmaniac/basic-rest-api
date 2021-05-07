@@ -5,38 +5,33 @@ import io.devfactory.user.exception.UserNotFoundException;
 import io.devfactory.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.core.TypeReferences.EntityModelType;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
+import static java.util.Objects.isNull;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RequiredArgsConstructor
 @RestController
-public class UserRestController {
+public class UserApi {
 
   private final UserService userService;
 
   @GetMapping("/users")
-  public List<User> retrieveAllUsers() {
-    return userService.findAllUsers();
+  public ResponseEntity<List<User>> retrieveAllUsers() {
+    return ResponseEntity.ok(userService.findAllUsers());
   }
 
   @GetMapping("/users/{id}")
-  public EntityModel<User> retrieveUser(@PathVariable("id") Long id) {
-    final User findUser = userService.findUserById(id);
+  public ResponseEntity<EntityModel<User>> retrieveUser(@PathVariable("id") Long id) {
+    final var findUser = userService.findUser(id);
 
     if (Objects.isNull(findUser)) {
       throw new UserNotFoundException(String.format("User ID not found: %d", id));
@@ -47,14 +42,14 @@ public class UserRestController {
     final WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllUsers());
     entityModel.add(linkTo.withRel("all-users"));
 
-    return entityModel;
+    return ResponseEntity.ok(entityModel);
   }
 
   @PostMapping("/users")
   public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-    final User savedUser = userService.saveUser(user);
+    final var savedUser = userService.saveUser(user);
 
-    final URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+    final var location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(savedUser.getId())
         .toUri()
@@ -64,13 +59,14 @@ public class UserRestController {
   }
 
   @DeleteMapping("/users/{id}")
-  public void removeUser(@PathVariable("id") Long id) {
-    final Long removeId = userService.deleteUserById(id);
+  public ResponseEntity<Object> removeUser(@PathVariable("id") Long id) {
+    final Long removeId = userService.deleteUser(id);
 
-    if (Objects.isNull(removeId)) {
+    if (isNull(removeId)) {
       throw new UserNotFoundException(String.format("User ID not found: %d", id));
     }
-  }
 
+    return ResponseEntity.noContent().build();
+  }
 
 }

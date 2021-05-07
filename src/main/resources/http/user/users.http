@@ -46,7 +46,6 @@ Authorization: Basic {{username}} {{password}}
 
 ###
 // 다국어 테스트
-
 GET http://localhost:8080/messages/greeting
 Authorization: Basic {{username}} {{password}}
 Accept-Language: {{lang}}

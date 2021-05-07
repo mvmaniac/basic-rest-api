@@ -36,6 +36,7 @@ logging:
   level:
     io.devfactory: debug
     org.hibernate.SQL: debug
+    org.apache.coyote.http11: debug
 
 decorator:
   datasource:

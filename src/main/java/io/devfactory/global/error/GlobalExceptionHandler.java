@@ -16,33 +16,29 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<Object> handleAllException(Exception ex, WebRequest webRequest) {
-    final ExceptionResponse exceptionResponse = ExceptionResponse.of(ex.getMessage(),
-        LocalDateTime.now(), webRequest.getDescription(false));
-
-    return new ResponseEntity<>(exceptionResponse, INTERNAL_SERVER_ERROR);
+  @SuppressWarnings("NullableProblems")
+  @Override
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
+      HttpHeaders headers, HttpStatus status, WebRequest request) {
+    final var errorResponse = ErrorResponse.of("Validation failed",
+        LocalDateTime.now(), exception.getBindingResult().toString());
+    return new ResponseEntity<>(errorResponse, BAD_REQUEST);
   }
 
   @ExceptionHandler(UserNotFoundException.class)
   public ResponseEntity<Object> handleUserNotFoundException(Exception ex, WebRequest webRequest) {
-    final ExceptionResponse exceptionResponse = ExceptionResponse.of(ex.getMessage(),
+    final var errorResponse = ErrorResponse.of(ex.getMessage(),
         LocalDateTime.now(), webRequest.getDescription(false));
-
-    return new ResponseEntity<>(exceptionResponse, NOT_FOUND);
+    return new ResponseEntity<>(errorResponse, NOT_FOUND);
   }
 
-  @SuppressWarnings("NullableProblems")
-  @Override
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-      HttpHeaders headers, HttpStatus status, WebRequest request) {
-
-    final ExceptionResponse exceptionResponse = ExceptionResponse.of("Validation failed",
-        LocalDateTime.now(), ex.getBindingResult().toString());
-
-    return new ResponseEntity<>(exceptionResponse, BAD_REQUEST);
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<Object> handleServerException(Exception exception, WebRequest webRequest) {
+    final var errorResponse = ErrorResponse.of(exception.getMessage(),
+        LocalDateTime.now(), webRequest.getDescription(false));
+    return new ResponseEntity<>(errorResponse, INTERNAL_SERVER_ERROR);
   }
 
 }

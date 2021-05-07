@@ -5,27 +5,31 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.springframework.stereotype.Service;
+
+import static java.util.Objects.isNull;
 
 @Service
 public class UserService {
 
-  private static List<User> users = new ArrayList<>();
-  private static int usersCount = 3;
+  private static final List<User> USERS = new ArrayList<>();
+  private static final AtomicLong usersCount = new AtomicLong(3);
 
   static {
-    users.add(User.of(1L, "Dev1", LocalDateTime.now(), "1234", "123456-78910"));
-    users.add(User.of(2L, "Dev2", LocalDateTime.now(), "2234", "223456-78910"));
-    users.add(User.of(3L, "Dev3", LocalDateTime.now(), "3234", "323456-78910"));
+    USERS.add(User.of(1L, "Dev1", LocalDateTime.now(), "1234", "123456-78910"));
+    USERS.add(User.of(2L, "Dev2", LocalDateTime.now(), "2234", "223456-78910"));
+    USERS.add(User.of(3L, "Dev3", LocalDateTime.now(), "3234", "323456-78910"));
   }
 
   public List<User> findAllUsers() {
-    return users;
+    return USERS;
   }
 
-  public User findUserById(Long id) {
+  public User findUser(Long id) {
     // @formatter:off
-    return users.stream()
+    return USERS.stream()
         .filter(user -> user.getId().equals(id))
         .findFirst()
         .orElse(null)
@@ -34,16 +38,16 @@ public class UserService {
   }
 
   public User saveUser(User user) {
-    if (Objects.isNull(user.getId())) {
-      user.changeId((long) ++usersCount);
+    if (isNull(user.getId())) {
+      user.updateId(usersCount.addAndGet(1));
     }
 
-    users.add(user);
+    USERS.add(user);
     return user;
   }
 
-  public Long deleteUserById(Long id) {
-    final boolean isRemove = users.removeIf(user -> user.getId().equals(id));
+  public Long deleteUser(Long id) {
+    final boolean isRemove = USERS.removeIf(user -> user.getId().equals(id));
     return isRemove ? id : null;
   }
 

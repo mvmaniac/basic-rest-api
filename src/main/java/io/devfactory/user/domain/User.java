@@ -1,9 +1,12 @@
 package io.devfactory.user.domain;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.devfactory.post.domain.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
@@ -21,7 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Schema(description = "사용자 상세 정보를 위한 도메인 객체")
-//@JsonIgnoreProperties({"password"})
+@JsonIgnoreProperties({"password"})
 //@JsonFilter("UserInfo")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
@@ -30,7 +33,7 @@ import lombok.NoArgsConstructor;
 public class User {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
   @Schema(description = "사용자의 이름을 입력해 주세요.")
@@ -51,7 +54,6 @@ public class User {
   @OneToMany(mappedBy = "user")
   private List<Post> posts = new ArrayList<>();
 
-  @Builder(builderMethodName = "create")
   protected User(Long id, String name, LocalDateTime joinDate, String password, String ssn) {
     this.id = id;
     this.name = name;
@@ -64,7 +66,7 @@ public class User {
     return new User(id, name, joinDate, password, ssn);
   }
 
-  public void changeId(Long id) {
+  public void updateId(Long id) {
     this.id = id;
   }
 

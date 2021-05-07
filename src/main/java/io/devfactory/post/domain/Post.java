@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor(access = PROTECTED)
@@ -22,7 +23,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class Post {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = IDENTITY)
   private Long id;
 
   private String description;
