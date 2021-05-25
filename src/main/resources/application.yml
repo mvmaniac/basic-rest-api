@@ -5,10 +5,12 @@ spring:
   messages:
     basename: i18n/messages
 
-  datasource:
-    data: classpath:sql/data.sql
+  sql:
+    init:
+      data-locations: classpath:sql/data.sql
 
   jpa:
+    defer-datasource-initialization: true
     show-sql: false
     hibernate:
       ddl-auto: create
