@@ -1,54 +1,59 @@
 package io.devfactory.global.config;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+  @Bean
+  public InMemoryUserDetailsManager userDetailsService() {
     // @formatter:off
-    auth
-      .inMemoryAuthentication()
-        .withUser("dev")
-          .password("{noop}1234")
-          .roles("USER")
-      ;
+    final var user = User
+      .withUsername("dev")
+      .password("{noop}1234")
+      .roles("USER")
+      .build();
+    // @formatter:on
+    return new InMemoryUserDetailsManager(user);
+  }
+
+  @Order(0)
+  @Bean
+  public SecurityFilterChain resourceChain(HttpSecurity http) throws Exception {
+    // @formatter:off
+    return http
+      .requestMatchers(matchers -> matchers.antMatchers("/docs/**"))
+      .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+      .requestCache(RequestCacheConfigurer::disable)
+      .securityContext(AbstractHttpConfigurer::disable)
+      .sessionManagement(AbstractHttpConfigurer::disable)
+      .build();
     // @formatter:on
   }
 
-  @Override
-  public void configure(WebSecurity web) throws Exception {
-    web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-        .antMatchers("/docs/**");
-  }
-
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     // @formatter:off
-    http
-      .authorizeRequests()
-        .antMatchers("/h2-console/**")
-          .permitAll()
-        .anyRequest()
-          .authenticated()
+    return http
+        .authorizeRequests(authorize -> authorize
+          .antMatchers("/h2-console/**")
+            .permitAll()
+          .anyRequest()
+            .authenticated())
+        .csrf(AbstractHttpConfigurer::disable)
+        .headers(headers -> headers.frameOptions().sameOrigin())
+        .httpBasic()
         .and()
-
-      .csrf()
-        .disable()
-
-      .headers()
-        .frameOptions()
-          .sameOrigin()
-        .and()
-
-      .httpBasic()
-      ;
+        .build();
     // @formatter:on
   }
+
 }
