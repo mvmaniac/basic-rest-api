@@ -1,6 +1,6 @@
 plugins {
-  id 'org.springframework.boot' version '2.6.4'
-  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'org.springframework.boot' version '2.7.5'
+  id 'io.spring.dependency-management' version '1.0.15.RELEASE'
   id "org.asciidoctor.jvm.convert" version "3.3.2" // restdoc -> asciidoc으로 사용시 필요?
   id 'com.epages.restdocs-api-spec' version '0.11.4' // restdoc -> openapi3으로 사용시 필요?
   id 'java'
@@ -8,8 +8,8 @@ plugins {
 
 group = 'io.devfactory'
 version = '0.0.1'
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = JavaVersion.VERSION_18
+targetCompatibility = JavaVersion.VERSION_18
 
 configurations {
   compileOnly {
@@ -34,11 +34,12 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-security'
   implementation 'org.springframework.data:spring-data-rest-hal-explorer'
 
-  implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
-  implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-  implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.2' // 브라우저에서 요청 시 xml 형식으로 나옴
+  implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
+  implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+  implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.4'
+  // 브라우저에서 요청 시 xml 형식으로 나옴
 
-  implementation 'org.springdoc:springdoc-openapi-ui:1.6.6' // restdoc -> openapi3으로 사용시 필요?
+  implementation 'org.springdoc:springdoc-openapi-ui:1.6.11' // restdoc -> openapi3으로 사용시 필요?
   asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor' // restdoc -> asciidoc으로 사용시 필요?
 
   runtimeOnly 'com.h2database:h2'
@@ -53,7 +54,7 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.springframework.security:spring-security-test'
   testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-  testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.0'
+  testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.16.2'
 }
 
 tasks.named('test') {
