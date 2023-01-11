@@ -1,13 +1,8 @@
 package io.devfactory.global.error;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-
 import io.devfactory.web.user.exception.UserNotFoundException;
-import java.time.LocalDateTime;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,13 +10,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDateTime;
+
+import static org.springframework.http.HttpStatus.*;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @SuppressWarnings("NullableProblems")
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
-      HttpHeaders headers, HttpStatus status, WebRequest request) {
+      HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     final var errorResponse = ErrorResponse.of("Validation failed",
         LocalDateTime.now(), exception.getBindingResult().toString());
     return new ResponseEntity<>(errorResponse, BAD_REQUEST);

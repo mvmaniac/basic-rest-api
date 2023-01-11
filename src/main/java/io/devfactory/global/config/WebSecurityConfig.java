@@ -30,7 +30,7 @@ public class WebSecurityConfig {
   public SecurityFilterChain resourceChain(HttpSecurity http) throws Exception {
     // @formatter:off
     return http
-      .requestMatchers(matchers -> matchers.antMatchers("/docs/**"))
+      .securityMatcher("/docs/**")
       .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
       .requestCache(RequestCacheConfigurer::disable)
       .securityContext(AbstractHttpConfigurer::disable)
@@ -43,8 +43,8 @@ public class WebSecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     // @formatter:off
     return http
-        .authorizeRequests(authorize -> authorize
-          .antMatchers("/h2-console/**")
+        .authorizeHttpRequests(authorize -> authorize
+          .requestMatchers("/h2-console/**")
             .permitAll()
           .anyRequest()
             .authenticated())
