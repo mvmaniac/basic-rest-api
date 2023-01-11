@@ -1,7 +1,7 @@
 package io.devfactory.web.user.domain;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
-import static javax.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -11,13 +11,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
