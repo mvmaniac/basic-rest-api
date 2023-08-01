@@ -5,10 +5,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class WebSecurityConfig {
@@ -49,9 +52,8 @@ public class WebSecurityConfig {
           .anyRequest()
             .authenticated())
         .csrf(AbstractHttpConfigurer::disable)
-        .headers(headers -> headers.frameOptions().sameOrigin())
-        .httpBasic()
-        .and()
+        .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+        .httpBasic(withDefaults())
         .build();
     // @formatter:on
   }
