@@ -1,5 +1,6 @@
 package io.devfactory.global.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -47,7 +48,7 @@ public class WebSecurityConfig {
     // @formatter:off
     return http
         .authorizeHttpRequests(authorize -> authorize
-          .requestMatchers("/h2-console/**")
+          .requestMatchers(PathRequest.toH2Console())
             .permitAll()
           .anyRequest()
             .authenticated())
