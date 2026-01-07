@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +31,7 @@ public class UserApi {
   }
 
   @GetMapping("/users/{id}")
-  public ResponseEntity<EntityModel<User>> retrieveUser(@PathVariable("id") Long id) {
+  public ResponseEntity<EntityModel<User>> retrieveUser(@PathVariable Long id) {
     final var findUser = userService.findUser(id);
 
     if (Objects.isNull(findUser)) {
@@ -52,14 +53,13 @@ public class UserApi {
     final var location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(savedUser.getId())
-        .toUri()
-      ;
+        .toUri();
 
     return ResponseEntity.created(location).build();
   }
 
   @DeleteMapping("/users/{id}")
-  public ResponseEntity<Object> removeUser(@PathVariable("id") Long id) {
+  public ResponseEntity<Object> removeUser(@PathVariable Long id) {
     final Long removeId = userService.deleteUser(id);
 
     if (isNull(removeId)) {

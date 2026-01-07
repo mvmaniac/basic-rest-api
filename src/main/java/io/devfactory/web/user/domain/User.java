@@ -8,9 +8,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.devfactory.web.post.domain.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -24,7 +26,6 @@ import lombok.NoArgsConstructor;
 
 @Schema(description = "사용자 상세 정보를 위한 도메인 객체")
 @JsonIgnoreProperties({"password"})
-//@JsonFilter("UserInfo")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 @Table(name = "tb_user")

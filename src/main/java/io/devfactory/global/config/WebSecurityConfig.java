@@ -1,6 +1,6 @@
 package io.devfactory.global.config;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -31,7 +31,7 @@ public class WebSecurityConfig {
 
   @Order(0)
   @Bean
-  public SecurityFilterChain resourceChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain resourceChain(HttpSecurity http) {
     // @formatter:off
     return http
       .securityMatcher("/docs/**")
@@ -44,7 +44,7 @@ public class WebSecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain filterChain(HttpSecurity http) {
     // @formatter:off
     return http
         .authorizeHttpRequests(authorize -> authorize

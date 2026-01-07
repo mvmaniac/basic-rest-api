@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -32,7 +33,7 @@ public class JpaUserApi {
   }
 
   @GetMapping("/users/{id}")
-  public ResponseEntity<EntityModel<User>> retrieveUser(@PathVariable("id") Long id) {
+  public ResponseEntity<EntityModel<User>> retrieveUser(@PathVariable Long id) {
     final var findUser = getFindUser(id);
 
     final EntityModel<User> entityModel = EntityModel.of(findUser);
@@ -49,26 +50,25 @@ public class JpaUserApi {
     final var location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(savedUser.getId())
-        .toUri()
-        ;
+        .toUri();
 
     return ResponseEntity.created(location).build();
   }
 
   @DeleteMapping("/users/{id}")
-  public ResponseEntity<Object> removeUser(@PathVariable("id") Long id) {
+  public ResponseEntity<Object> removeUser(@PathVariable Long id) {
     userRepository.deleteById(id);
     return ResponseEntity.noContent().build();
   }
 
   @GetMapping("/users/{id}/posts")
-  public ResponseEntity<List<Post>> retrieveAllPostsByUser(@PathVariable("id") Long id) {
+  public ResponseEntity<List<Post>> retrieveAllPostsByUser(@PathVariable Long id) {
     final var findUser = getFindUser(id);
     return ResponseEntity.ok(findUser.getPosts());
   }
 
   @PostMapping("/users/{id}/posts")
-  public ResponseEntity<Post> createPost(@PathVariable("id") Long id, @RequestBody Post post) {
+  public ResponseEntity<Post> createPost(@PathVariable Long id, @RequestBody Post post) {
     final var findUser = getFindUser(id);
 
     post.changeUser(findUser);
@@ -77,13 +77,12 @@ public class JpaUserApi {
     final var location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(savedPost.getId())
-        .toUri()
-        ;
+        .toUri();
 
     return ResponseEntity.created(location).build();
   }
 
-  private User getFindUser(@PathVariable("id") Long id) {
+  private User getFindUser(Long id) {
     return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
   }
 

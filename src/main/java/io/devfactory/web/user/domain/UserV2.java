@@ -1,13 +1,12 @@
 package io.devfactory.web.user.domain;
 
-import static lombok.AccessLevel.PROTECTED;
-
-import com.fasterxml.jackson.annotation.JsonFilter;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@JsonFilter("UserInfoV2")
+import java.time.LocalDateTime;
+
+import static lombok.AccessLevel.PROTECTED;
+
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 public class UserV2 extends User {
