@@ -1,114 +1,122 @@
 plugins {
-    id 'org.springframework.boot' version '3.4.4'
-    id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.asciidoctor.jvm.convert' version "3.3.2" // restdoc -> asciidoc으로 사용시 필요?
-    id 'com.epages.restdocs-api-spec' version '0.17.1' // restdoc -> openapi3으로 사용시 필요?
-    id 'java'
+  id 'org.springframework.boot' version '4.0.2'
+  id 'io.spring.dependency-management' version '1.1.7'
+  id 'org.asciidoctor.jvm.convert' version '4.0.5' // restdoc -> asciidoc으로 사용시 필요?
+  id 'com.epages.restdocs-api-spec' version '0.19.4' // restdoc -> openapi3으로 사용시 필요?
+  id 'java'
 }
 
 group = 'io.devfactory'
 version = '0.0.1'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(25)
+  }
 }
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    asciidoctorExt
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+  asciidoctorExt
 }
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 ext {
-    set('snippetsDir', file("build/generated-snippets"))
+  set('snippetsDir', file("build/generated-snippets"))
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.data:spring-data-rest-hal-explorer'
+  implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+  implementation 'org.springframework.boot:spring-boot-h2console'
+  implementation 'org.springframework.data:spring-data-rest-hal-explorer'
 
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.10.0'
+  implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:2.0.0'
 
-    implementation 'org.mapstruct:mapstruct:1.6.3'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+  implementation 'org.mapstruct:mapstruct:1.6.3'
+  annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 
-    // 브라우저에서 요청 시 xml 형식으로 나옴
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0'
+  // 브라우저에서 요청 시 xml 형식으로 나옴
+  implementation 'tools.jackson.dataformat:jackson-dataformat-xml:3.0.3'
 
-    // restdoc -> openapi3으로 사용시 필요?
-    implementation 'org.springdoc:springdoc-openapi-ui:1.8.0'
+  // restdoc -> openapi3으로 사용시 필요?
+  implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.1'
 
-    // restdoc -> asciidoc으로 사용시 필요?
-    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+  // restdoc -> asciidoc으로 사용시 필요?
+  asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
-    runtimeOnly 'com.h2database:h2'
+  runtimeOnly 'com.h2database:h2'
 
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+  developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
+  compileOnly 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok'
+  testCompileOnly 'org.projectlombok:lombok'
+  testAnnotationProcessor 'org.projectlombok:lombok'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.4'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+  testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+  testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
+  testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+  testImplementation 'org.springframework.boot:spring-boot-starter-data-rest-test'
+  testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
+  testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
+  testImplementation 'org.springframework.boot:spring-boot-starter-hateoas-test'
+  testImplementation 'org.springframework.boot:spring-boot-restdocs'
+  testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+  testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.4'
+  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
-    outputs.dir snippetsDir
-    useJUnitPlatform()
+  outputs.dir snippetsDir
+  useJUnitPlatform()
 }
 
 tasks.named('compileJava') {
-    inputs.files(tasks.named('processResources'))
+  inputs.files(tasks.named('processResources'))
 }
 
 asciidoctor {
-    inputs.dir snippetsDir
-    configurations 'asciidoctorExt'
+  inputs.dir snippetsDir
+  configurations 'asciidoctorExt'
 
-    sources { // 특정 파일만 html로 만든다.
-        include("**/index.adoc")
-    }
-    baseDirFollowsSourceFile() // 다른 adoc 파일을 include 할 때 경로를 baseDir로 맞춘다.
+  sources { // 특정 파일만 html로 만든다.
+    include("**/index.adoc")
+  }
+  baseDirFollowsSourceFile() // 다른 adoc 파일을 include 할 때 경로를 baseDir로 맞춘다.
 
-    dependsOn test
+  dependsOn test
 }
 
 tasks.register('copyAsciidocHTML', Copy) {
-    dependsOn asciidoctor
-    from "${asciidoctor.outputDir}"
-    into "${project.rootDir}/src/main/resources/static/docs"
+  dependsOn asciidoctor
+  from "${asciidoctor.outputDir}"
+  into "${project.rootDir}/src/main/resources/static/docs"
 }
 
 bootJar {
-    dependsOn copyAsciidocHTML
+  dependsOn copyAsciidocHTML
 }
 
 openapi3 {
-    server = 'http://localhost:8080'
-    title = 'Basic Rest API'
-    description = 'Basic Rest API description'
-    version = '0.1.0'
-    format = 'yaml'
+  server = 'http://localhost:8080'
+  title = 'Basic Rest API'
+  description = 'Basic Rest API description'
+  version = '0.1.0'
+  format = 'yaml'
 
-    copy {
-        from "build/api-spec"
-        into "${project.rootDir}/src/main/resources/static/docs"
-    }
+  copy {
+    from "build/api-spec"
+    into "${project.rootDir}/src/main/resources/static/docs"
+  }
 }
